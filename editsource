@@ -1,0 +1,27 @@
+#!/usr/bin/env bashionista
+
+# author:  Bas Huis
+# website: https://github.com/bas080
+# created: Wed Aug  5 15:41:06 CEST 2020
+# changed: Wed Aug  5 15:41:01 CEST 2020
+# license: GNU General Public License 3.0
+
+source bash-logger;
+
+function _editsource_completion ()
+{
+    printf 'complete -c %s;\n' "editsource"
+}
+function _editsource_fallback()
+{
+    local comm="$(realpath "$(which "$1")")";
+    [ -n "$comm" ] || {
+        log_error "$1 is not a script.";
+        exit 1
+    };
+    eval "${EDITOR:-vim}" "$comm"
+}
+function _editsource_default()
+{
+    _editsource_fallback editsource
+}
