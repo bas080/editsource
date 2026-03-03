@@ -16,8 +16,10 @@ function _editsource_fallback()
 {
     local comm="$(realpath "$(which "$1")")";
     [ -n "$comm" ] || {
-        log_error "$1 is not a script.";
-        exit 1
+        local script_path="~/.local/bin/$1"
+        echo "#!/usr/bin/env " > "$script_path"
+        $EDITOR "$script_path"
+        chmod +x "$script_path"
     };
     eval "${EDITOR:-vim}" "$comm"
 }
